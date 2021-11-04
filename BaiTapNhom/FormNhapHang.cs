@@ -1,0 +1,110 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace BaiTapNhom
+{
+    public partial class FormNhapHang : Form
+    {
+        Connect_db kn = new Connect_db();
+        public FormNhapHang()
+        {
+            InitializeComponent();
+        }
+        private void BangCTNH()
+        {
+            DataTable dta = new DataTable();
+            dta = kn.Lay_DulieuBang("select * from nhapHang");
+            GridViewCTNH.DataSource = dta;
+            cboNCC.DataSource = dta;
+            cboNCC.DisplayMember = "mancc";
+            cboNCC.ValueMember = "mancc";
+            Hienthi_Dulieu();
+        }
+        private void Hienthi_Dulieu()
+        {
+
+            txtMaNH.DataBindings.Clear();
+            txtMaNH.DataBindings.Add("Text", GridViewCTNH.DataSource, "manhap");
+
+            cboNCC.DataBindings.Clear();
+            cboNCC.DataBindings.Add("Text", GridViewCTNH.DataSource, "mancc");
+
+            txtNgaynhap.DataBindings.Clear();
+            txtNgaynhap.DataBindings.Add("Text", GridViewCTNH.DataSource, "ngaynhap");
+
+        }
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnTao_Click_1(object sender, EventArgs e)
+        {
+            txtMaNH.Text = "";
+            txtNgaynhap.Text = "";
+        }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            string sql_ktra = "Select manhap From nhapHang Where manhap ='" + txtMaNH.Text + "'";
+            SqlCommand cmd = new SqlCommand(sql_ktra, kn.cnn);
+            SqlDataReader doc_d1 = cmd.ExecuteReader();
+            if (doc_d1.Read() == true)
+            {
+                MessageBox.Show("Mã nhập hàng đã tồn tại, nhập lại mã mới", "Thông báo");
+                txtMaNH.Focus();
+                doc_d1.Close();
+                doc_d1.Dispose();
+            }
+            else
+            {
+                string sql_luu = "Insert into nhapHang(manhap,mancc,ngaynhap) Values('" + txtMaNH.Text + "', '" + cboNCC.Text + "','" + txtNgaynhap.Text + "')";
+                kn.ThucThi(sql_luu);
+                BangCTNH();
+            }
+        }
+
+        private void btnHuy_Click(object sender, EventArgs e)
+        {
+            DialogResult thongbao;
+            thongbao = MessageBox.Show("Bạn có muốn xóa dữ liệu này không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (thongbao == DialogResult.Yes)
+            {
+                string sql_xoa = "Delete nhapHang where manhap = '" + txtMaNH.Text + "'";
+                BangCTNH();
+            }
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            string sql_sua = "Update nhapHang set ngaynhap ='" + txtNgaynhap.Text + "' where manhap = '" + txtMaNH.Text + "'";
+            kn.ThucThi(sql_sua);
+            BangCTNH();
+        }
+
+        private void FormNhapHang_Load(object sender, EventArgs e)
+        {
+            BangCTNH();
+            Hienthi_Dulieu();
+        }
+
+        private void GridViewCTNH_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Hienthi_Dulieu();
+        }
+    }
+}
