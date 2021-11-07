@@ -226,6 +226,7 @@ namespace BaiTapNhom
             this.Controls.Add(this.lblPhongBan);
             this.Name = "FormNCC";
             this.Text = "FormNCC";
+            this.Load += new System.EventHandler(this.FormNCC_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NhaCungCap)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

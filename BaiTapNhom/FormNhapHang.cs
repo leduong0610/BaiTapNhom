@@ -14,19 +14,23 @@ namespace BaiTapNhom
     public partial class FormNhapHang : Form
     {
         Connect_db kn = new Connect_db();
+        DataTable dta = new DataTable();
         public FormNhapHang()
         {
             InitializeComponent();
         }
-        private void BangCTNH()
+        private void BangNH()
         {
-            DataTable dta = new DataTable();
             dta = kn.Lay_DulieuBang("select * from nhapHang");
             GridViewCTNH.DataSource = dta;
+            Hienthi_Dulieu();
+        }
+        private void BangNCC()
+        {
+            dta = kn.Lay_DulieuBang("select * from nhaCungCap");
             cboNCC.DataSource = dta;
             cboNCC.DisplayMember = "mancc";
             cboNCC.ValueMember = "mancc";
-            Hienthi_Dulieu();
         }
         private void Hienthi_Dulieu()
         {
@@ -72,9 +76,9 @@ namespace BaiTapNhom
             }
             else
             {
-                string sql_luu = "Insert into nhapHang(manhap,mancc,ngaynhap) Values('" + txtMaNH.Text + "', '" + cboNCC.Text + "','" + txtNgaynhap.Text + "')";
+                string sql_luu = "Insert into nhapHang(manhap,mancc,ngaynhap) Values('" + txtMaNH.Text + "', '" + cboNCC.Text + "','" +txtNgaynhap.Text+ "')";
                 kn.ThucThi(sql_luu);
-                BangCTNH();
+                BangNH();
             }
         }
 
@@ -85,7 +89,7 @@ namespace BaiTapNhom
             if (thongbao == DialogResult.Yes)
             {
                 string sql_xoa = "Delete nhapHang where manhap = '" + txtMaNH.Text + "'";
-                BangCTNH();
+                BangNH();
             }
         }
 
@@ -93,12 +97,13 @@ namespace BaiTapNhom
         {
             string sql_sua = "Update nhapHang set ngaynhap ='" + txtNgaynhap.Text + "' where manhap = '" + txtMaNH.Text + "'";
             kn.ThucThi(sql_sua);
-            BangCTNH();
+            BangNH();
         }
 
         private void FormNhapHang_Load(object sender, EventArgs e)
         {
-            BangCTNH();
+            BangNH();
+            BangNCC();
             Hienthi_Dulieu();
         }
 

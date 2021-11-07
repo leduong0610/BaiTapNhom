@@ -16,7 +16,7 @@ namespace BaiTapNhom
 
         public void KetNoi_Dulieu()
         {
-            string str = @"Data Source=LAPTOP-RBBGQV6I\SQLEXPRESS;Initial Catalog=Web;Integrated Security=True";
+            string str = @"Data Source=LAPTOP-RBBGQV6I\SQLEXPRESS;Initial Catalog=BTN;Integrated Security=True";
             cnn = new SqlConnection(str);
             cnn.Open();
         }

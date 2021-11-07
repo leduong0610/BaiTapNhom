@@ -16,7 +16,7 @@ namespace BaiTapNhom
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormCTHD());
+            Application.Run(new FormMain());
         }
     }
 }

@@ -19,12 +19,6 @@ namespace BaiTapNhom
             InitializeComponent();
         }
 
-        private void FrmNCC_Load(object sender, EventArgs e)
-        {
-            BANG_NHACUNGCAP();
-            HIENTHI_DULIEU();
-        }
-
         private void BANG_NHACUNGCAP()
         {
             DataTable dta = new DataTable();
@@ -89,6 +83,12 @@ namespace BaiTapNhom
 
         private void DataGrid_NhaCungCap_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            HIENTHI_DULIEU();
+        }
+
+        private void FormNCC_Load(object sender, EventArgs e)
+        {
+            BANG_NHACUNGCAP();
             HIENTHI_DULIEU();
         }
     }

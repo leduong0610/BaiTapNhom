@@ -23,16 +23,25 @@ namespace BaiTapNhom
             DataTable dta = new DataTable();
             dta = kn.Lay_DulieuBang("select * from hoaDon");
             GridViewHoaDon.DataSource = dta;
+            Hienthi_Dulieu();
+        }
+        private void BangKhachHang()
+        {
+            DataTable dta = new DataTable();
+            dta = kn.Lay_DulieuBang("select * from khachHang");
             cboKhachHang.DataSource = dta;
             cboKhachHang.DisplayMember = "makh";
             cboKhachHang.ValueMember = "makh";
+        }
 
+        private void BangNhanVien()
+        {
+            DataTable dta = new DataTable();
+            dta = kn.Lay_DulieuBang("select * from nhanVien");
             cboNhanVien.DataSource = dta;
             cboNhanVien.DisplayMember = "manv";
             cboNhanVien.ValueMember = "manv";
-            Hienthi_Dulieu();
         }
-
         private void Hienthi_Dulieu()
         {
 
@@ -58,6 +67,8 @@ namespace BaiTapNhom
         private void FormHoaDon_Load(object sender, EventArgs e)
         {
             BangHoaDon();
+            BangKhachHang();
+            BangNhanVien();
             Hienthi_Dulieu();
         }
 
@@ -69,11 +80,23 @@ namespace BaiTapNhom
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            string sql1;
-            sql1 = "insert into hoaDon values ('" + txtMaHD.Text + "','" + cboKhachHang.Text + "',";
-            sql1 = sql1 + "' ,'" + cboNhanVien.Text + "','" + txtNgay.Text + "' )  ";
-            kn.ThucThi(sql1);
-            BangHoaDon();
+            string sql_ktra = "Select mahd From hoaDon Where mahd ='" + txtMaHD.Text + "'";
+            SqlCommand cmd = new SqlCommand(sql_ktra, kn.cnn);
+            SqlDataReader doc_d1 = cmd.ExecuteReader();
+            if (doc_d1.Read() == true)
+            {
+                MessageBox.Show("Mã hóa đơn đã tồn tại, nhập lại mã mới", "Thông báo");
+                txtMaHD.Focus();
+                doc_d1.Close();
+                doc_d1.Dispose();
+            }
+            else
+            {
+                string sql_them;
+                sql_them = " INSERT INTO hoaDon(mahd, makh, manv, ngaytao) VALUES ('" + txtMaHD.Text + "', '" + cboKhachHang.Text + "', '" + cboNhanVien.Text + "', '" + txtNgay.Text + "')";
+                kn.ThucThi(sql_them);
+                BangHoaDon();
+            }
         }
 
         private void btnHuy_Click(object sender, EventArgs e)

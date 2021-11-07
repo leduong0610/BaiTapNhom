@@ -14,6 +14,7 @@ namespace BaiTapNhom
     public partial class FormCTHD : Form
     {
         Connect_db kn = new Connect_db();
+        DataTable dta = new DataTable();
         public FormCTHD()
         {
             InitializeComponent();
@@ -21,19 +22,25 @@ namespace BaiTapNhom
 
         private void BangCTHD()
         {
-            DataTable dta = new DataTable();
+          
             dta = kn.Lay_DulieuBang("select * from chiTiet_hoaDon");
             GridViewCTHD.DataSource = dta;
+            Hienthi_Dulieu();
+        }
+        private void BangHD()
+        {
+            dta = kn.Lay_DulieuBang("select * from hoaDon");
             cboHoadon.DataSource = dta;
             cboHoadon.DisplayMember = "mahd";
             cboHoadon.ValueMember = "mahd";
+        }
+        private void BangHH()
+        {
+            dta = kn.Lay_DulieuBang("select * from hangHoa");
             cboHang.DataSource = dta;
             cboHang.DisplayMember = "mahh";
             cboHang.ValueMember = "mahh";
-            Hienthi_Dulieu();
         }
-
-
         private void Hienthi_Dulieu()
         {
 
@@ -98,7 +105,7 @@ namespace BaiTapNhom
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            string sql_sua = "Update chiTiet_nhapHang set soluong ='" + numSL.Value + "' Where macthd = '" + txtMaCTHD.Text + "'";
+            string sql_sua = "Update chiTiet_hoaDon set soluong ='" + numSL.Value + "' Where macthd = '" + txtMaCTHD.Text + "'";
             kn.ThucThi(sql_sua);
             BangCTHD();
         }
@@ -110,6 +117,9 @@ namespace BaiTapNhom
 
         private void GridViewCTHD_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            BangCTHD();
+            BangHD();
+            BangHH();
             Hienthi_Dulieu();
         }
     }
